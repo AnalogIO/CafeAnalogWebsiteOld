@@ -9,6 +9,7 @@
     <meta name="viewport" content="width=device-width">
 
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha/css/bootstrap.min.css">
     <link rel="stylesheet" href={{ url_for('static', filename='css/main.css') }}>
     <link href="//fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
     <script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
@@ -37,32 +38,49 @@
     <meta name="msapplication-TileImage" content="/mstile-144x144.png">
     <meta name="theme-color" content="#000000">
 </head>
-<body>
-    <div id="background">
-        <img src={{ model.gif }} alt="">
-    </div>
+<body style="background-image: {{ "url(\"" + model.gif + "\")" }}">
+<section>
+    <div class="container opening-hours">
+        <div class="row">
+            <h1>
+                {% if model.open %}
+                    We're Åpen!
+                {% else %}
+                    We're Cløsed!
+                {% endif %}
+            </h1>
+        </div>
 
-    <div id="openingHours" class="longCaptions">
-        <h1>
-            {% if model.open %}
-                We're Åpen!
-            {% else %}
-                We're Cløsed!
-            {% endif %}
-        </h1>
-        <h2>Opening hours the next 7 days:</h2>
+        <div class="row">
+            <h2>Opening hours the next 7 days:</h2>
+        </div>
 
-        <ol>
         {% for day in model.schedule %}
-            <li> {{ day.day }}: {{ " - ".join(day.time_slots) }} </li>
+            <div class="row">
+                <div class="col-xs-10 col-xs-offset-1" style="background-color: none">
+                    <div class="row">
+                        <div class="col-xs-2 col-lg-offset-4 col-xs-offset-3" style="text-align: left; background-color: none">
+                            {{ day.day }}:
+                        </div>
+                        <div class="col-xs-5" style="text-align: left; background-color: none">
+                            {{ " - ".join(day.time_slots) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
         {% endfor %}
-        </ol>
 
-        <a class="email" href="mailto:analogen@cafeanalog.dk">E-mail us!</a>
-        <br>
-        <div class="music-information"></div>
-        <a class="lastfm-link" href="http://last.fm/user/AnalogIO">View our previous tracklist</a>
+        <div class="row">
+            <h5>
+                <a class="email" href="mailto:analogen@cafeanalog.dk">E-mail us!</a>
+            </h5>
+        </div>
+
+        <div class="row">
+            <a class="lastfm-link music-information" href="http://last.fm/user/AnalogIO"></a>
+        </div>
     </div>
+</section>
 
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.2.1/jquery.min.js"></script>
 <script src={{ url_for('static', filename='script/plugins.js') }}></script>

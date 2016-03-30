@@ -1,6 +1,6 @@
 import json
+import os
 
-from datetime import datetime
 from dateutil import parser
 from urllib import request
 from flask import Flask, render_template, url_for
@@ -18,13 +18,13 @@ class Day:
 
 @app.route('/')
 def index():
-    open_status = get_json_from_url("http://cafeanalog.dk/api/open")
+    get_random_gif(True)
+    open_status = get_json_from_url("http://cafeanalog.dk/api/open")["open"]
     shifts = get_json_from_url("http://cafeanalog.dk/api/shifts")
 
-    gif = url_for('static', filename='gif/open/giphy.gif')
     model = {
-        "gif": gif,
-        "open": open_status["open"],
+        "gif": get_random_gif(open_status),
+        "open": open_status,
         "schedule":
             convert_json_shift_to_days(shifts)
     }
@@ -36,6 +36,12 @@ def get_json_from_url(url):
     data = webURL.read()
     encoding = webURL.info().get_content_charset('utf-8')
     return json.loads(data.decode(encoding))
+
+
+def get_random_gif(open):
+    folder = 'open' if open else 'closed'
+    gif = url_for('static', filename='gif/open/giphy.gif')
+    return gif
 
 
 def convert_json_shift_to_days(shifts):
@@ -63,6 +69,7 @@ def convert_json_shift_to_days(shifts):
         day.time_slots = sorted(new)
 
     return sorted(days.values(), key=lambda x: x.day_number)
+
 
 if __name__ == '__main__':
     app.debug = True
