@@ -45,16 +45,16 @@
     <div id="openingHours" class="longCaptions">
         <h1>
             {% if model.open %}
-                "We're Åpen!"
+                We're Åpen!
             {% else %}
-                "We're Cløsed!"
+                We're Cløsed!
             {% endif %}
         </h1>
         <h2>Opening hours the next 7 days:</h2>
 
         <ol>
-        {% for shift in model.schedule %}
-            <li>{{ shift }}</li>
+        {% for day in model.schedule %}
+            <li> {{ day.day }}: {{ " - ".join(day.time_slots) }} </li>
         {% endfor %}
         </ol>
 
